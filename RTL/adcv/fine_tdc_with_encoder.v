@@ -17,7 +17,7 @@ module fine_tdc_with_encoder
 	wire fired;
 	wire valid;
 
-	wire [STAGES-1:0] fine_value_reg;
+	wire [STAGES-1:0]    fine_value_reg;
 	wire [FINE_BITS-1:0] fine_value_bin;
 
 

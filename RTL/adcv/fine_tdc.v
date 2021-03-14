@@ -10,7 +10,7 @@ module fine_tdc
 		input trigger,	    // START signal input (triggers carrychain)
 		input reset,		
 		input clock,		// STOP signal input (assumed to be clock synchronous)
-		output [(STAGES-1):0] latched_output		//Carrychain output, to be converted to binary
+		output [(STAGES-1):0] latched_output //Carrychain output, to be converted to binary
 	);
 
 genvar i,j;
@@ -19,7 +19,7 @@ wire [STAGES-1:0] unreg;
 wire [STAGES-1:0] register;
 
 //generate carry_delay_line
-for (i = 0; i < (STAGES-1); i=i+1) begin
+for (i = 0; i <= (STAGES-1); i=i+1) begin
 
 	if (i == 0)
 		SB_CARRY my_carry_inst (
@@ -28,7 +28,6 @@ for (i = 0; i < (STAGES-1); i=i+1) begin
 		      .I1(1'b1),
 		      .CI(trigger));
 	
-
 	if (i > 0)
 		SB_CARRY my_carry_inst (
 		      .CO(unreg[i]),
@@ -39,7 +38,7 @@ for (i = 0; i < (STAGES-1); i=i+1) begin
 end //carry_delay_line
 
 //latch for stability
-for (j=0; j < STAGES-1; j=j+1) begin
+for (j=0; j <= STAGES-1; j=j+1) begin
 	SB_DFFR FDR_1 (
 		.Q(register[j]),
 		.C(clock),

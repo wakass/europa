@@ -11,9 +11,9 @@ module therm2bin_pipeline_count
     reg [((2**b)-1):0] thermo_reg;
     reg [(b-1):0] bin_reg;
 	initial begin
-		thermo_reg = ((2**b)-1)'b1;
-		bin_reg = (b-1)'b1;
-	end 
+		thermo_reg <= 'b1;
+		bin_reg <= 'b1;
+	end
 
 	assign thermo = thermo_reg;
 	assign bin = bin_reg;
