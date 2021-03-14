@@ -8,9 +8,14 @@ module therm2bin_pipeline_count
 		input [((2**b)-1):0] thermo,
 		output [(b-1):0] bin
     );
-    reg [((2**b)-1):0] data_reg;
-	initial data_reg = ((2**b)-1)'b1;
+    reg [((2**b)-1):0] thermo_reg;
+    reg [(b-1):0] bin_reg;
+	initial begin
+		thermo_reg = ((2**b)-1)'b1;
+		bin_reg = (b-1)'b1;
+	end 
 
-	assign thermo = data_reg;
+	assign thermo = thermo_reg;
+	assign bin = bin_reg;
 
 endmodule
