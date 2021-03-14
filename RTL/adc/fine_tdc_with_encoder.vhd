@@ -71,7 +71,7 @@ ARCHITECTURE structure OF fine_tdc_with_encoder IS
 	
 BEGIN
 	
-	input_filter1 : FDCE
+	input_filter1 : SB_DFFESR --Xilinx: FDCE
 		GENERIC MAP (
 			INIT => '0')
 		PORT MAP (
@@ -81,7 +81,7 @@ BEGIN
 			C    => hit,
 			CE   => '1');
 			
-	input_filter2 : FDCE
+	input_filter2 : SB_DFFESR --Xilinx: FDCE
 		GENERIC MAP (
 			INIT => '0')
 		PORT MAP (
@@ -93,7 +93,7 @@ BEGIN
 
 	filtered_hit <= NOT filtered_hit_2;
 
-	input_filter_fired1 : FDCE
+	input_filter_fired1 : SB_DFFESR --Xilinx: FDCEFDCE
 		GENERIC MAP (
 			INIT => '0')
 		PORT MAP (
@@ -103,7 +103,7 @@ BEGIN
 			C    => clock,
 			CE   => '1');
 			
-	input_filter_fired2 : FDCE
+	input_filter_fired2 : SB_DFFESR --Xilinx: FDCEFDCE
 		GENERIC MAP (
 			INIT => '0')
 		PORT MAP (
