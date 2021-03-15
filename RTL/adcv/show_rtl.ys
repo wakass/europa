@@ -1,0 +1,24 @@
+# set architecture
+synth_ice40
+json hardware.json
+
+# read design
+read_verilog count_ones_tb.v
+read_verilog count_ones.v
+select -module count_ones
+
+hierarchy -check
+
+
+# Generate proc netlist
+proc;
+
+show -prefix select -format pdf
+opt;
+show -prefix select_opt -format pdf
+# Optimizations
+#opt;
+#fsm; opt; 
+#memory; opt;
+
+#show -prefix select -format pdf -notitle -pause
