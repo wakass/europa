@@ -1,0 +1,48 @@
+`default_nettype none
+`define DUMPSTR(x) `"x.vcd`"
+`timescale 1 ns / 1 ps
+
+
+module top_tb;
+	parameter DURATION = 1000;
+
+	parameter FINE_BITS = 8;
+	parameter THERMO_WIDTH = 256;
+	
+	
+	reg reset,valid;
+	reg [THERMO_WIDTH-1:0] thermo;
+
+	/* Make a regular pulsing clock. */
+	reg clk = 0;    //stop signal
+	always #5 clk = !clk;
+
+	//Stimulus train
+	initial begin
+		reset = 0;
+		valid = 0;
+		thermo= 0;
+		 # 1 thermo = 256'b1111111111111111111111111111111111111111111111111111111;
+		 # 15 valid  = 1;
+	
+		 # 150 reset = 1;
+		 # 1   reset = 0;
+		 # 1   thermo = 256'b11111111111111111111111111111111111111111111111111111111111111111111;
+		 # 2   valid = 1;
+	end
+
+
+	wire [FINE_BITS-1:0] count_binary;
+	therm2bin_pipeline_count #(.b(8)) pipe(clk, reset, valid, thermo, count_binary);
+
+
+	initial begin
+
+	  //-- File were to store the simulation results
+	  $dumpfile(`DUMPSTR(`VCD_OUTPUT));
+	  $dumpvars(0, top_tb);
+
+	   #(DURATION) $display("End of simulation");
+	  $finish;
+	end
+endmodule // test

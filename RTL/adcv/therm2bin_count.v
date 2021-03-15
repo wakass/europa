@@ -58,7 +58,7 @@ module therm2bin_pipeline_count
 			data_valid[b-3] <= 'b0;
 		end
 		else begin
-			stage_final_bin <= binary[b-4][b-1 : 4] & final_count;
+			stage_final_bin <= { binary[b-4][b-1 : 4] , final_count};
 			data_valid[b-3] <= data_valid[b-4];
 
 		end
