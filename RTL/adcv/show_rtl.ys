@@ -3,22 +3,22 @@ synth_ice40
 json hardware.json
 
 # read design
-read_verilog count_ones_tb.v
+read_verilog therm2bin_count.v
 read_verilog count_ones.v
-select -module count_ones
+
+select -module therm2bin_pipeline_count
 
 hierarchy -check
 
 
 # Generate proc netlist
-proc;
+proc; opt;
+
+
+# Optimizations
+
+fsm; opt; 
+memory; opt;
 
 show -prefix select -format pdf
-opt;
-show -prefix select_opt -format pdf
-# Optimizations
-#opt;
-#fsm; opt; 
-#memory; opt;
-
-#show -prefix select -format pdf -notitle -pause
+#show -prefix select -format dot -notitle
