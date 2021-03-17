@@ -1,7 +1,8 @@
-module clockdcm
+module clock_dcm
 	(
 		// input  clk, reset,
-		input  int_osc,
+		input  clk,
+		input  reset,
 		output clock_48MHz,
 		output clock_48MHz_inv
 	);
