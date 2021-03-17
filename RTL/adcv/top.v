@@ -28,7 +28,8 @@ wire V_REF;
   wire clock_48MHz;
   wire clock_48MHz_inv;
 
-  assign digital_out  = FINE_BITS'd255 - value_fine_2 + value_fine_1;
+  
+  assign digital_out  = 9'd255 - value_fine_2 + value_fine_1;
 
   SB_IO #(.IO_STANDARD("SB_LVDS_INPUT"), .PIN_TYPE(6'b000000)) comparator (
     .PACKAGE_PIN (V_REF), //The second (differential) package pin is implied. The partner pin is determined by hardware.
