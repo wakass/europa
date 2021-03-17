@@ -1,52 +1,30 @@
-//----------------------------------------------------------------------------
-//                                                                          --
-//                         Module Declaration                               --
-//                                                                          --
-//----------------------------------------------------------------------------
-module rgb_blink (
-  // outputs
-  output wire led_red  , // Red
-  output wire led_blue , // Blue
-  output wire led_green  // Green
+module top #(
+    parameter STAGES    =512,
+    parameter FINE_BITS = 9,
+    parameter Xoff_TDC1 = 34,
+    parameter Xoff_TDC2 = 52,
+    parameter Yoff      = 32
+)
+(
+    input user_reset,  
+    input clk_in,      // input 200 MHz clock
+    output clk_out,    // clock to generate ramp 
+    input V_IN,        // the analog input signal
+    input V_REF,       // the reference input signal (ramp)
+    output [FINE_BITS:0] digital_out
 );
 
-  wire        int_osc            ;
-  reg  [27:0] frequency_counter_i;
+  wire comp_out;
+  
+  wire [FINE_BITS : 0] value_fine_1;
+  wire [FINE_BITS : 0] value_fine_2;
 
-//----------------------------------------------------------------------------
-//                                                                          --
-//                       Internal Oscillator                                --
-//                                                                          --
-//----------------------------------------------------------------------------
-  SB_HFOSC u_SB_HFOSC (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+  wire clock_200MHz;
+  wire clock_200MHz_inv;
 
-
-//----------------------------------------------------------------------------
-//                                                                          --
-//                       Counter                                            --
-//                                                                          --
-//----------------------------------------------------------------------------
-  always @(posedge int_osc) begin
-    frequency_counter_i <= frequency_counter_i + 1'b1;
-  end
-
-//----------------------------------------------------------------------------
-//                                                                          --
-//                       Instantiate RGB primitive                          --
-//                                                                          --
-//----------------------------------------------------------------------------
-  SB_RGBA_DRV RGB_DRIVER (
-    .RGBLEDEN(1'b1                                            ),
-    .RGB0PWM (frequency_counter_i[25]&frequency_counter_i[24] ),
-    .RGB1PWM (frequency_counter_i[25]&~frequency_counter_i[24]),
-    .RGB2PWM (~frequency_counter_i[25]&frequency_counter_i[24]),
-    .CURREN  (1'b1                                            ),
-    .RGB0    (led_green                                       ), //Actual Hardware connection
-    .RGB1    (led_blue                                        ),
-    .RGB2    (led_red                                         )
-  );
-  defparam RGB_DRIVER.RGB0_CURRENT = "0b000001";
-  defparam RGB_DRIVER.RGB1_CURRENT = "0b000001";
-  defparam RGB_DRIVER.RGB2_CURRENT = "0b000001";
+  SB_IO #(.IO_STANDARD("SB_LVDS_INPUT"), .PIN_TYPE(6'b000000)) comparator (
+    .PACKAGE_PIN (V_REF), //The second (differential) package pin is implied. The partner pin is determined by hardware.
+    .D_IN_0(comp_out)
+    );
 
 endmodule
