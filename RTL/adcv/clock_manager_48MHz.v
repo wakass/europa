@@ -21,7 +21,13 @@ module clock_dcm
 	SB_GB clkout_48MHz_buf(int_osc, clk_48MHz_dcm_buf);
 	SB_GB clkout_48MHz_inv_buf(~int_osc, clk_48MHz_dcm_inv_buf);
 	
+	//In simulation just take the regular clock.
+	`ifdef SIMULATION
+		assign clock_48MHz     = clk;
+		assign clock_48MHz_inv = ~clk;
+
+	`else
 	assign clock_48MHz     = clk_48MHz_dcm_buf;
 	assign clock_48MHz_inv = clk_48MHz_dcm_inv_buf;
-
+	`endif
 endmodule

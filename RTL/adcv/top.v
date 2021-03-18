@@ -6,21 +6,16 @@ module top #(
     parameter Yoff      = 32
 )
 (
-    //input user_reset,  
-    //input clk_in,      // input 200 MHz clock
-    //output clk_out,    // clock to generate ramp 
-    //input V_IN,        // the analog input signal
-    //input V_REF,       // the reference input signal (ramp)
-    //output [FINE_BITS:0] digital_out
+    `ifdef SIMULATION
+    input hit,
+    `endif
+    input user_reset,  
+    input clk_in,      // input 200 MHz clock
+    output clk_out,    // clock to generate ramp 
+    input V_IN,        // the analog input signal
+    input V_REF,       // the reference input signal (ramp)
+    output [FINE_BITS:0] digital_out
 );
-//To be defined physical wires/constraints
-wire [FINE_BITS:0] digital_out;
-wire user_reset;
-wire clk_in;
-wire clk_out;
-wire V_IN;
-wire V_REF;
-
   wire comp_out;  
   wire [FINE_BITS : 0] value_fine_1;
   wire [FINE_BITS : 0] value_fine_2;
@@ -28,13 +23,19 @@ wire V_REF;
   wire clock_48MHz;
   wire clock_48MHz_inv;
 
-  
-  assign digital_out  = 9'd255 - value_fine_2 + value_fine_1;
+  reg [FINE_BITS:0] temp;
+  always @(*)
+    temp[FINE_BITS:0] = 9'd255 - value_fine_2 + value_fine_1;
+  assign digital_out = temp;
 
+  `ifdef SIMULATION
+  assign comp_out = hit;
+  `else
   SB_IO #(.IO_STANDARD("SB_LVDS_INPUT"), .PIN_TYPE(6'b000000)) comparator (
     .PACKAGE_PIN (V_REF), //The second (differential) package pin is implied. The partner pin is determined by hardware.
     .D_IN_0(comp_out)
     );
+  `endif
   fine_tdc_with_encoder #(
       .STAGES     (STAGES),
       .FINE_BITS  (FINE_BITS),
@@ -61,7 +62,8 @@ wire V_REF;
     .value_fine (value_fine_2[FINE_BITS-1 : 0]) 
     );
 
-  SB_GB_IO #(.PIN_TYPE(6'b010000)) clk_buf ( // ODDR buffer for the clock to create the reference ramp outside the FPGA
+  // ODDR buffer for the clock to create the reference ramp outside the FPGA
+  SB_GB_IO #(.PIN_TYPE(6'b010000)) clk_buf ( 
       .D_OUT_0 (1'b1),                
       .D_OUT_1 (1'b0),
       .OUTPUT_CLK (clock_48MHz_inv),
