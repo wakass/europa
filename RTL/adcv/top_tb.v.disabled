@@ -1,0 +1,45 @@
+`default_nettype none
+`define DUMPSTR(x) `"x.vcd`"
+`timescale 1 ns / 1 ps
+
+module top_tb;
+	parameter DURATION = 1000;
+	parameter FINE_BITS = 9;
+	wire CLK_OUT; //ramp clock, physical output
+	wire [FINE_BITS:0] digital_out;
+	
+	reg reset;
+	reg hit;
+	wire V_IN;
+	wire V_REF;
+
+	/* Make a regular pulsing clock. */
+	reg clk = 0;    //stop signal
+	always #5 clk = !clk;
+
+	//Stimulus train
+	initial begin
+		reset = 0;
+		hit   = 0;
+		 # 50 hit = 1;
+		 # 5  hit = 0;
+		 # 150 reset = 1;
+		 # 1   reset = 0;
+		 
+		 # 25   reset = 1;
+		 # 1   reset = 0;
+	end
+
+	adcv pipe(hit, reset, clk, CLK_OUT, V_IN, V_REF, digital_out);
+
+
+	initial begin
+
+	  //-- File were to store the simulation results
+	  $dumpfile(`DUMPSTR(`VCD_OUTPUT));
+	  $dumpvars(0, top_tb);
+
+	   #(DURATION) $display("End of simulation");
+	  $finish;
+	end
+endmodule // test

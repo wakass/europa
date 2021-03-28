@@ -7,19 +7,20 @@ module clock_dcm
 		output clock_48MHz_inv
 	);
 	
-	// -- Generating a 48MHz clock using internal oscillator
-	wire int_osc;
-    SB_HFOSC u_SB_HFOSC (
-    	.CLKHFPU(1'b1), 
-    	.CLKHFEN(1'b1), 
-    	.CLKHF(int_osc));
+	// // -- Generating a 48MHz clock using internal oscillator
+	// wire int_osc;
+ //    SB_HFOSC u_SB_HFOSC (
+ //    	.CLKHFPU(1'b1), 
+ //    	.CLKHFEN(1'b1), 
+ //    	.CLKHF(int_osc));
+ //    defparam u_SB_HFOSC.CLKHF_DIV = "0b11";
 
 	// -- Output buffering
     wire clk_48MHz_dcm_buf;
 	wire clk_48MHz_dcm_inv_buf;
 
-	SB_GB clkout_48MHz_buf(int_osc, clk_48MHz_dcm_buf);
-	SB_GB clkout_48MHz_inv_buf(~int_osc, clk_48MHz_dcm_inv_buf);
+	SB_GB clkout_48MHz_buf(clk, clk_48MHz_dcm_buf);
+	SB_GB clkout_48MHz_inv_buf(~clk, clk_48MHz_dcm_inv_buf);
 	
 	//In simulation just take the regular clock.
 	`ifdef SIMULATION

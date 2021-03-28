@@ -1,0 +1,50 @@
+`default_nettype none
+`define DUMPSTR(x) `"x.vcd`"
+`timescale 10 ns / 1 ns
+
+
+module fine_tdc_with_encoder_tb;
+	parameter DURATION = 500;
+	parameter STAGES = 64; //Number of TDC carry-stages
+	parameter FINE_BITS = 6;
+
+	wire [FINE_BITS-1:0] value_fine;
+
+	/* Make a regular pulsing clock. */
+	reg clk = 0;    //stop signal
+	reg hit;
+	reg reset;
+	always #1 clk = !clk;
+
+	//Stimulus train
+	initial begin
+		reset = 1;
+		hit   = 0;
+	     # 1 reset =0;		
+		 # 10 hit =1;
+		 # 1  hit =0;
+		 # 50 hit = 1;
+		 # 5  hit = 0;
+
+
+		 # 150 reset = 1;
+		 # 1   reset = 0;
+		 
+		 # 25   reset = 1;
+		 # 1   reset = 0;
+	end
+
+
+	fine_tdc_with_encoder #(.STAGES(STAGES),.FINE_BITS(FINE_BITS)) c1(clk,reset,hit, value_fine);
+
+
+	initial begin
+
+	  //-- File were to store the simulation results
+	  $dumpfile(`DUMPSTR(`VCD_OUTPUT));
+	  $dumpvars(0, fine_tdc_with_encoder_tb);
+
+	   #(DURATION) $display("End of simulation");
+	  $finish;
+	end
+endmodule // test

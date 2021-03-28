@@ -1,8 +1,8 @@
 module fine_tdc_with_encoder 
 	# (
-		parameter STAGES    = 256,
-		parameter FINE_BITS	= 8,
-		parameter Xoff		= 8,
+		parameter STAGES    = 256, //Number of TDC carry stages
+		parameter FINE_BITS	= 8,   //Bit-size of representation
+		parameter Xoff		= 8,   //Layout parameters for Synthesis
 		parameter Yoff		= 24)
 	 (
 		input clock,
@@ -20,7 +20,7 @@ module fine_tdc_with_encoder
 	wire [STAGES-1:0]    fine_value_reg;
 
 
-	SB_DFFESR input_filter1 (
+	SB_DFFER input_filter1 (
 			.Q(filtered_hit_1),
 			.R(filtered_hit_1),
 			.D(1'b1),
@@ -28,7 +28,7 @@ module fine_tdc_with_encoder
 			.E(1'b1)
 			);
 			
-	SB_DFFESR input_filter2 (
+	SB_DFFER input_filter2 (
 			.Q(filtered_hit_2),
 			.R(filtered_hit_1),
 			.D(1'b1),
@@ -38,7 +38,7 @@ module fine_tdc_with_encoder
 
 	assign filtered_hit = ~filtered_hit_2;
 
-	SB_DFFESR input_filter_fired1 (
+	SB_DFFER input_filter_fired1 (
 			.Q(fired),
 			.R(1'b0),
 			.D(filtered_hit),
@@ -46,7 +46,7 @@ module fine_tdc_with_encoder
 			.E(1'b1)
 			);
 			
-	SB_DFFESR input_filter_fired2 (
+	SB_DFFER input_filter_fired2 (
 			.Q(valid),
 			.R(1'b0),
 			.D(fired),

@@ -39,13 +39,13 @@ end //carry_delay_line
 
 //latch for stability
 for (j=0; j <= STAGES-1; j=j+1) begin
-	SB_DFFR FDR_1 (
+	SB_DFFSR FDR_1 (
 		.Q(register[j]),
 		.C(clock),
 		.D(unreg[j]),
 		.R(reset)
 	);
-	SB_DFFR FDR_2 (
+	SB_DFFSR FDR_2 (
 		.Q(latched_output[j]),
 		.C(clock),
 		.D(register[j]),

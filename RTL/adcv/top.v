@@ -1,4 +1,4 @@
-module top #(
+module adcv #(
     parameter STAGES    =512,
     parameter FINE_BITS = 9,
     parameter Xoff_TDC1 = 34,
@@ -10,10 +10,10 @@ module top #(
     input hit,
     `endif
     input user_reset,  
-    input clk_in,      // input 200 MHz clock
-    output clk_out,    // clock to generate ramp 
-    input V_IN,        // the analog input signal
-    input V_REF,       // the reference input signal (ramp)
+    input  clk_in,      // input 200 MHz clock
+    output clk_out,     // clock to generate ramp 
+    input V_IN,         // the analog input signal
+    input V_REF,        // the reference input signal (ramp)
     output [FINE_BITS:0] digital_out
 );
   wire comp_out;  
@@ -23,17 +23,18 @@ module top #(
   wire clock_48MHz;
   wire clock_48MHz_inv;
 
-  reg [FINE_BITS:0] temp;
+  reg [FINE_BITS:0] temp = 9'd0;
   always @(*)
     temp[FINE_BITS:0] = 9'd255 - value_fine_2 + value_fine_1;
   assign digital_out = temp;
+  // assign digital_out[8:0] = 255 - value_fine_2 + value_fine_1;
 
   `ifdef SIMULATION
   assign comp_out = hit;
   `else
   SB_IO #(.IO_STANDARD("SB_LVDS_INPUT"), .PIN_TYPE(6'b000000)) comparator (
     .PACKAGE_PIN (V_REF), //The second (differential) package pin is implied. The partner pin is determined by hardware.
-    .D_IN_0(comp_out)
+    .D_IN_1(comp_out)
     );
   `endif
   fine_tdc_with_encoder #(
@@ -63,12 +64,15 @@ module top #(
     );
 
   // ODDR buffer for the clock to create the reference ramp outside the FPGA
-  SB_GB_IO #(.PIN_TYPE(6'b010000)) clk_buf ( 
+  SB_IO clk_buf ( 
       .D_OUT_0 (1'b1),                
       .D_OUT_1 (1'b0),
       .OUTPUT_CLK (clock_48MHz_inv),
       .PACKAGE_PIN (clk_out)
-      );
+    );
+  defparam clk_buf.PULLUP = 1'b0;
+  defparam clk_buf.PIN_TYPE = {4'b0100,2'b00};
+  defparam clk_buf.IO_STANDARD = "SB_LVCMOS";
 
   clock_dcm clk_mapping
     (
