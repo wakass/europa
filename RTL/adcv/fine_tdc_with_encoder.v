@@ -1,7 +1,8 @@
+(* keep_hierarchy *)
 module fine_tdc_with_encoder 
 	# (
-		parameter STAGES    = 256, //Number of TDC carry stages
-		parameter FINE_BITS	= 8,   //Bit-size of representation
+		parameter STAGES    = 64, //Number of TDC carry stages
+		parameter FINE_BITS	= 6,   //Bit-size of representation
 		parameter Xoff		= 8,   //Layout parameters for Synthesis
 		parameter Yoff		= 24)
 	 (

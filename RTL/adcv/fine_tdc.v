@@ -1,5 +1,4 @@
-
-
+(* keep_hierarchy *)
 module fine_tdc 
 	#(
 		parameter STAGES = 5,
@@ -19,16 +18,16 @@ wire [STAGES-1:0] unreg;
 wire [STAGES-1:0] register;
 
 //generate carry_delay_line
-for (i = 0; i <= (STAGES-1); i=i+1) begin
+for (i = 0; i <= (STAGES-1); i=i+1) begin : carry_delay_line
 
-	if (i == 0)
+	if (i == 0)(* keep *)
 		SB_CARRY my_carry_inst (
 		      .CO(unreg[0]),
 		      .I0(1'b0),
 		      .I1(1'b1),
 		      .CI(trigger));
 	
-	if (i > 0)
+	if (i > 0) (* keep *)
 		SB_CARRY my_carry_inst (
 		      .CO(unreg[i]),
 		      .I0(1'b0),

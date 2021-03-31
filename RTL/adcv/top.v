@@ -1,6 +1,6 @@
 module adcv #(
-    parameter STAGES    =512,
-    parameter FINE_BITS = 9,
+    parameter STAGES    = 64,//256,
+    parameter FINE_BITS = 7,//9
     parameter Xoff_TDC1 = 34,
     parameter Xoff_TDC2 = 52,
     parameter Yoff      = 32
@@ -12,8 +12,8 @@ module adcv #(
     input user_reset,  
     input  clk_in,      // input 200 MHz clock
     output clk_out,     // clock to generate ramp 
-    input V_IN,         // the analog input signal
-    input V_REF,        // the reference input signal (ramp)
+    input wire V_IN,         // the analog input signal, implied
+    // input wire V_REF,        // the reference input signal (ramp)
     output [FINE_BITS:0] digital_out
 );
   wire comp_out;  
@@ -23,19 +23,24 @@ module adcv #(
   wire clock_48MHz;
   wire clock_48MHz_inv;
 
-  reg [FINE_BITS:0] temp = 9'd0;
-  always @(*)
-    temp[FINE_BITS:0] = 9'd255 - value_fine_2 + value_fine_1;
-  assign digital_out = temp;
-  // assign digital_out[8:0] = 255 - value_fine_2 + value_fine_1;
+  // reg [FINE_BITS:0] temp = 9'd0;
+  // always @(*)
+    // digital_out[FINE_BITS:0] = 9'd255 - value_fine_2 + value_fine_1;
+  // assign digital_out = temp;
+  assign digital_out[6:0] = 255 - value_fine_2 + value_fine_1;
 
   `ifdef SIMULATION
   assign comp_out = hit;
   `else
-  SB_IO #(.IO_STANDARD("SB_LVDS_INPUT"), .PIN_TYPE(6'b000000)) comparator (
-    .PACKAGE_PIN (V_REF), //The second (differential) package pin is implied. The partner pin is determined by hardware.
+  
+  SB_IO  comparator (
+    .PACKAGE_PIN (V_IN), //The second (differential) package pin is implied. The partner pin is determined by hardware.
     .D_IN_1(comp_out)
     );
+
+  defparam comparator.IO_STANDARD = "SB_LVDS_INPUT";
+  defparam comparator.PIN_TYPE = 6'b000000;
+
   `endif
   fine_tdc_with_encoder #(
       .STAGES     (STAGES),

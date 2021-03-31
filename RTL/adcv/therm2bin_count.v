@@ -1,4 +1,4 @@
-
+(* keep_hierarchy *)
 module therm2bin_pipeline_count
 	#(parameter b = 8)
     (
