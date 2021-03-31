@@ -1,3 +1,5 @@
+# Building the yosys toolchain
+
 ## Prerequisites (mac)
 brew install libftdi qt5 boost eigen cmake coreutils
 alias nproc=sysctl -n hw.logicalcpu
