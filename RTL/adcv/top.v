@@ -1,6 +1,6 @@
 module adcv #(
     parameter STAGES    = 64,//256,
-    parameter FINE_BITS = 7,//9
+    parameter FINE_BITS = 6,//9
     parameter Xoff_TDC1 = 34,
     parameter Xoff_TDC2 = 52,
     parameter Yoff      = 32
@@ -27,7 +27,7 @@ module adcv #(
   // always @(*)
     // digital_out[FINE_BITS:0] = 9'd255 - value_fine_2 + value_fine_1;
   // assign digital_out = temp;
-  assign digital_out[6:0] = 255 - value_fine_2 + value_fine_1;
+  assign digital_out[FINE_BITS:0] = 255 - value_fine_2 + value_fine_1;
 
   `ifdef SIMULATION
   assign comp_out = hit;

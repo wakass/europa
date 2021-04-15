@@ -1,6 +1,7 @@
 
 module europa_blink #(
-  parameter FINE_BITS = 7
+  parameter FINE_BITS = 6,
+  parameter STAGES = 64
   )(
   // outputs
   output wire led_red  , // Red
@@ -36,8 +37,7 @@ module europa_blink #(
   SB_LFOSC u_SB_LFOSC (.CLKLFPU(1'b1), .CLKLFEN(1'b1), .CLKLF(lf_osc));
 
   //clock at internal hf oscillator speed, reset at lf oscillator
-  (* keep *) 
-  adcv #(.FINE_BITS(FINE_BITS)) adc(reset, int_osc, EU_REF_CLK, EU_A1, digital_out);
+  adcv #(.FINE_BITS(FINE_BITS), .STAGES(STAGES)) adc(reset, int_osc, EU_REF_CLK, EU_A1, digital_out);
 
 //Drive all VREF input pins to one parameters
 // SB_IO #(.PIN_TYPE(6'b000000)) all[2:0](

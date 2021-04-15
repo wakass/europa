@@ -9,8 +9,8 @@ module therm2bin_pipeline_count
 		output [(b-1):0] bin
     );
 
-	reg [(b-1):0] stage_final_bin;
-	wire [15:0]  stage_final;     //final bit counter, 16bit
+	reg  [(b-1):0] stage_final_bin;
+	wire [15:0]    stage_final;     //final bit counter, 16bit
 	reg  [(b-3):0] data_valid;
 	
 	// TYPE decoder_array IS ARRAY (0 TO b-4) OF std_logic_vector(((2**b)-2) DOWNTO 0);
@@ -36,13 +36,13 @@ module therm2bin_pipeline_count
 	    		data_valid[i+1] <= 0;
      		end
      		else begin
-     			binary[i+1][b : b-1-i] <=  { binary[i][b : b-i] , decoding[i][((2**(b-i))-2)/2] };
+     			binary[i+1][b : b-1-i] <= { binary[i][b : b-i] , decoding[i][((2**(b-i))-2)/2] };
 				data_valid[i+1]        <= data_valid[i];
 				
 				if ( decoding[i][((2**(b-i))-2)/2] == 'b1 )
-					decoding[i+1][((2**(b-i))-2)/2-1 : 0] <= decoding[i][((2**(b-i))-2) : ((2**(b-i))-2)/2+1];
+					decoding[i+1][(((2**(b-i))-2)/2-1) : 0] <= decoding[i][((2**(b-i))-2) : ((2**(b-i))-2)/2+1];
 				else
-					decoding[i+1][((2**(b-i))-2)/2-1 : 0] <= decoding[i][((2**(b-i))-2)/2-1 : 0];
+					decoding[i+1][(((2**(b-i))-2)/2-1) : 0] <= decoding[i][(((2**(b-i))-2)/2-1) : 0];
 	  		end
 	    end
     end

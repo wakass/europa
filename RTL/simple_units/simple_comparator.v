@@ -1,4 +1,4 @@
-module simple_sens #(
+module simple_comparator #(
   )(
   input EU_BUTTON1,
   output EU_AU_1,

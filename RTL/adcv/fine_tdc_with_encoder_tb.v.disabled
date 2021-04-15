@@ -5,8 +5,8 @@
 
 module fine_tdc_with_encoder_tb;
 	parameter DURATION = 500;
-	parameter STAGES = 64; //Number of TDC carry-stages
-	parameter FINE_BITS = 6;
+	parameter STAGES = 128; //Number of TDC carry-stages
+	parameter FINE_BITS = 7;
 
 	wire [FINE_BITS-1:0] value_fine;
 
@@ -22,7 +22,9 @@ module fine_tdc_with_encoder_tb;
 		hit   = 0;
 	     # 1 reset =0;		
 		 # 10 hit =1;
-		 # 1  hit =0;
+		 # 2  hit =0;
+		 # 2  hit =1;
+		 # 2  hit =0;
 		 # 50 hit = 1;
 		 # 5  hit = 0;
 

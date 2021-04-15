@@ -26,3 +26,5 @@ upload:
 dac: simple_dac.asc
 	icepack $^ hardware.bin
 
+clean:
+	rm -rf *.json *.asc hardware.bin

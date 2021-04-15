@@ -18,7 +18,8 @@ module fine_tdc_with_encoder
 	wire fired;
 	wire valid;
 
-	wire [STAGES-1:0]    fine_value_reg;
+	wire [(STAGES-1):0]       fine_value_reg;
+	wire [(FINE_BITS-1):0]    fine_value_bin;
 
 
 	SB_DFFER input_filter1 (
@@ -68,7 +69,8 @@ module fine_tdc_with_encoder
 			.reset(reset),
 			.valid(valid),
 			.thermo(fine_value_reg),
-			.bin(value_fine)
+			.bin(fine_value_bin)
 		);
+	assign value_fine = fine_value_bin;
 	
 endmodule
