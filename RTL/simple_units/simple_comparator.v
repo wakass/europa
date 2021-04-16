@@ -38,11 +38,14 @@ SB_LFOSC u_SB_LFOSC (.CLKLFPU(1'b1), .CLKLFEN(1'b1), .CLKLF(lf_osc));
 (*keep*)
 SB_IO  comparator (
     .PACKAGE_PIN (EU_A0), //The second (differential) package pin is implied. The partner pin is determined by hardware.
-    .D_IN_1(trigger),
-    .INPUT_CLK(hf_osc)
+    .D_IN_0(trigger),
+    //.INPUT_CLK(hf_osc),
+    .LATCH_INPUT_VALUE(1'b0)
     );
 defparam comparator.IO_STANDARD = "SB_LVDS_INPUT";
-defparam comparator.PIN_TYPE = 6'b000000;
+//This PIN_TYPE value routes the diff input value to the d_in_0
+//it also conventiently bypasses the flipflops that are clock-driven. Bye bye input_clk
+defparam comparator.PIN_TYPE = 6'b000001; 
 
 // SB_IO clk_buf ( 
 //     .D_OUT_0 (1'b1),
