@@ -1,39 +1,68 @@
 module simple_comparator #(
   )(
-  input EU_BUTTON1,
-  output EU_AU_1,
-  input EU_A1
+  input EU_BUTTON1, //Simple button input
+  input EU_BUTTON2, //Second button
+  output EU_AU_1, //Audio output
+  input EU_A0,     //Analog input
+  output EU_REF_CLK   //External output for clk to generate ramp
 );
 
-wire clk;
+
 wire lf_osc;
-wire comp_out;
-reg simple_latch;
-reg  [4:0]  lf_counter_i;
+wire hf_osc;
+
+wire trigger;
+reg COMP_TRIGGERED;
+
+reg  [5:0]  lf_counter_i;
 
 always @(posedge lf_osc) begin
-  if (simple_latch)
+  if (COMP_TRIGGERED || EU_BUTTON1)
     lf_counter_i <= lf_counter_i + 1'b1;
 end
 
-// always @(posedge comp_out or negedge comp_out) begin
-always @(comp_out) begin
-  if (comp_out)
-    simple_latch <= 'b1;
+always @(posedge trigger, posedge EU_BUTTON2) begin
+  if (trigger)
+    COMP_TRIGGERED <= 'b1;
   else
-    simple_latch <= 'b0;
+    COMP_TRIGGERED <= 'b0;
 end
 
-assign EU_AU_1 = lf_counter_i[4]; 
+assign EU_AU_1 = lf_counter_i[5];
+
+SB_HFOSC u_SB_HFOSC (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(hf_osc));
+defparam u_SB_HFOSC.CLKHF_DIV = "0b11"; //6MHz
 
 SB_LFOSC u_SB_LFOSC (.CLKLFPU(1'b1), .CLKLFEN(1'b1), .CLKLF(lf_osc));
 
 (*keep*)
 SB_IO  comparator (
-    .PACKAGE_PIN (EU_A1), //The second (differential) package pin is implied. The partner pin is determined by hardware.
-    .D_IN_1(comp_out)
+    .PACKAGE_PIN (EU_A0), //The second (differential) package pin is implied. The partner pin is determined by hardware.
+    .D_IN_1(trigger),
+    .INPUT_CLK(hf_osc)
     );
+defparam comparator.IO_STANDARD = "SB_LVDS_INPUT";
+defparam comparator.PIN_TYPE = 6'b000000;
 
+// SB_IO clk_buf ( 
+//     .D_OUT_0 (1'b1),
+//     .D_OUT_1 (1'b0),
+//     .OUTPUT_CLK (hf_osc),
+//     .PACKAGE_PIN (EU_REF_CLK)
+//   );
+// defparam clk_buf.PIN_TYPE = {4'b0100,2'b00};
 
+//Drop the clock down to 3 MHz for easier scoping
+reg clk_3M;
+always @(posedge hf_osc)
+  clk_3M <= clk_3M + 1'b1;
+SB_IO clk_buf ( 
+    .D_OUT_0 (clk_3M),
+    .OUTPUT_CLK (hf_osc),
+    .PACKAGE_PIN (EU_REF_CLK)
+  );
+defparam clk_buf.PIN_TYPE = {4'b0101,2'b00};
+
+defparam clk_buf.IO_STANDARD = "SB_LVCMOS";
 
 endmodule

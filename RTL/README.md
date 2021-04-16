@@ -15,11 +15,11 @@ mkdir Release &&  cd Release
 
 cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_GUI=ON ../
 
-cmake ./ -DARCH=ice40 -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=ON -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ ../
+cmake ./ -DARCH=ice40 -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=ON -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ -DUSE_TBB=ON ../
 
 debug build: (run it twice if you have to, it messes with the cache)
 mkdir Debug && cd Debug
-cmake -DARCH=ice40 -DCMAKE_BUILD_TYPE=Debug -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=OFF -DUSE_TBB=OFF -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=FALSE -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DICE40_UP5K_ONLY=1 ../
+cmake -DARCH=ice40 -DCMAKE_BUILD_TYPE=Debug -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=OFF -DUSE_TBB=OFF -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ -DUSE_IPO=OFF -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DICE40_UP5K_ONLY=1 ../
 
 lldb -- nextpnr-ice40 otherargs
 

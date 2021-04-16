@@ -1,4 +1,7 @@
-//Demonstration module to show a swept Triangle wave being output on a delta sigma modulated DAC. A low pass filter might be required, but generally audio circuits already have a limited response. Plus..it's fun to hear weird sounds.
+// Demonstration module to show a swept Triangle wave being output on a 
+// delta sigma modulated DAC. A low pass filter might be required, but 
+// generally audio circuits already have a limited response. 
+// Plus..it's fun to hear weird sounds.
 
 module top (
   output EU_AU_1,
@@ -31,11 +34,11 @@ module top (
 
   end
 
-  simple_dac #(.width(bit_width)) daccy(.din(lf_counter),.clk(hf_osc), .bit_out(EU_AU_1));
+  simple_ds #(.width(bit_width)) dac(.din(lf_counter),.clk(hf_osc), .bit_out(EU_AU_1));
 
 endmodule
 
-module simple_dac #(
+module simple_ds #(
     parameter width = 8
   )(
   input [width-1:0] din,
