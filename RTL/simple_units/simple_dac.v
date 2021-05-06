@@ -4,8 +4,8 @@
 // Plus..it's fun to hear weird sounds.
 
 module top (
-  output EU_AU_1,
-  input EU_A1
+  output EU_AU_0,
+  input EU_A0
   );
   parameter bit_width = 16;
 
@@ -34,7 +34,7 @@ module top (
 
   end
 
-  simple_ds #(.width(bit_width)) dac(.din(lf_counter),.clk(hf_osc), .bit_out(EU_AU_1));
+  simple_ds #(.width(bit_width)) dac(.din(lf_counter),.clk(hf_osc), .bit_out(EU_AU_0));
 
 endmodule
 

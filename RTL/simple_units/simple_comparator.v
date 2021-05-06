@@ -1,8 +1,8 @@
 module simple_comparator #(
   )(
-  input EU_BUTTON1, //Simple button input
-  input EU_BUTTON2, //Second button
-  output EU_AU_1, //Audio output
+  input EU_BUTTON0, //Simple button input
+  input EU_BUTTON1, //Second button
+  output EU_AU_0, //Audio output
   input EU_A0,     //Analog input
   output EU_REF_CLK   //External output for clk to generate ramp
 );
@@ -28,7 +28,7 @@ always @(posedge trigger, posedge EU_BUTTON2) begin
     COMP_TRIGGERED <= 'b0;
 end
 
-assign EU_AU_1 = lf_counter_i[5];
+assign EU_AU_0 = lf_counter_i[5];
 
 SB_HFOSC u_SB_HFOSC (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(hf_osc));
 defparam u_SB_HFOSC.CLKHF_DIV = "0b11"; //6MHz
