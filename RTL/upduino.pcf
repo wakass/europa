@@ -64,12 +64,12 @@ set_io -nowarn gpio_10 10
 
 
 ## Redefines for Europa
-set_io -nowarn EU_AU_1             12      
-set_io -nowarn EU_AU_1_VREF        21      
-set_io -nowarn EU_AU_2             19      
-set_io -nowarn EU_BUTTON1          9       
-set_io -nowarn EU_BUTTON2          11      
-set_io -nowarn EU_BUTTON3          10      
+set_io -nowarn EU_AU_0             12      
+set_io -nowarn EU_AU_0_VREF        21      
+set_io -nowarn EU_AU_1             19      
+set_io -nowarn EU_BUTTON0          9       
+set_io -nowarn EU_BUTTON1          11      
+set_io -nowarn EU_BUTTON2          10      
 set_io -nowarn EU_A0               48      
 set_io -nowarn EU_A0_VREF          45      
 set_io -nowarn EU_A1               4       

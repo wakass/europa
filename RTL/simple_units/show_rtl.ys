@@ -1,0 +1,24 @@
+# set architecture
+synth_ice40
+json hardware.json
+
+# read design
+read_verilog simple_dac.v
+
+
+select -module top
+
+hierarchy -check
+
+
+# Generate proc netlist
+proc; opt;
+
+
+# Optimizations
+
+fsm; opt; 
+memory; opt;
+flatten;
+show -prefix select -format pdf
+#show -prefix select -format dot -notitle

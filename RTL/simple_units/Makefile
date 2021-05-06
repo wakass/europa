@@ -18,7 +18,7 @@ upload:
 	$(CC) -p "synth_ice40 -json $@" $(CC_FLAGS) $^ 
 
 %.asc: %.json 
-	$(PNR) $(PNR_FLAGS) --up5k --package sg48 --json $^ --asc $@ --pcf upduino.pcf -q
+	$(PNR) $(PNR_FLAGS) --up5k --package sg48 --json $^ --asc $@ --pcf ../upduino.pcf -q
 
 # %.bin: %.asc
 # 	icepack $^ $@
