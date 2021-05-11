@@ -17,11 +17,11 @@ reg COMP_TRIGGERED;
 reg  [5:0]  lf_counter_i;
 
 always @(posedge lf_osc) begin
-  if (COMP_TRIGGERED || EU_BUTTON1)
+  if (COMP_TRIGGERED || EU_BUTTON0)
     lf_counter_i <= lf_counter_i + 1'b1;
 end
 
-always @(posedge trigger, posedge EU_BUTTON2) begin
+always @(posedge trigger, posedge EU_BUTTON1) begin
   if (trigger)
     COMP_TRIGGERED <= 'b1;
   else
@@ -31,7 +31,7 @@ end
 assign EU_AU_0 = lf_counter_i[5];
 
 SB_HFOSC u_SB_HFOSC (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(hf_osc));
-defparam u_SB_HFOSC.CLKHF_DIV = "0b11"; //6MHz
+// defparam u_SB_HFOSC.CLKHF_DIV = "0b11"; //6MHz
 
 SB_LFOSC u_SB_LFOSC (.CLKLFPU(1'b1), .CLKLFEN(1'b1), .CLKLF(lf_osc));
 

@@ -1,0 +1,3 @@
+[submodule "RTL/verifla"]
+	path = RTL/verifla
+	url = https://github.com/wd5gnr/verifla

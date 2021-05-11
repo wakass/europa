@@ -35,11 +35,11 @@ module adcv #(
   
   SB_IO  comparator (
     .PACKAGE_PIN (V_IN), //The second (differential) package pin is implied. The partner pin is determined by hardware.
-    .D_IN_1(comp_out)
+    .D_IN_0(comp_out)
     );
 
   defparam comparator.IO_STANDARD = "SB_LVDS_INPUT";
-  defparam comparator.PIN_TYPE = 6'b000000;
+  defparam comparator.PIN_TYPE = 6'b000001;
 
   `endif
   fine_tdc_with_encoder #(

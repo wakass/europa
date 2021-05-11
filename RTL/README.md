@@ -15,7 +15,7 @@ mkdir Release &&  cd Release
 
 cmake -DARCH=ice40 -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_GUI=ON ../
 
-cmake ./ -DARCH=ice40 -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=ON -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ -DUSE_TBB=ON ../
+cmake -DARCH=ice40 -DICESTORM_INSTALL_PREFIX=/usr/local/ -DBUILD_GUI=ON -DTBB_DIR=/usr/local/Cellar/tbb/2020_U3_1/ -DUSE_TBB=ON USE_IPO=OFF ../
 
 debug build: (run it twice if you have to, it messes with the cache)
 mkdir Debug && cd Debug
